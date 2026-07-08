@@ -1,15 +1,17 @@
 import React from "react";
 import Image from "next/image";
-import {
-  CollectionProps,
-  FeaturedCollectionsProps,
-} from "../types/collections";
+import { collection, FeaturedCollectionsProps } from "../../types/collections";
 
-function CollectionCard({ id, imgSource, colName }: CollectionProps) {
+function CollectionCard(Collection: collection): React.JSX.Element {
   return (
     <div className="bg-[#202020] rounded-xl p-2 m-2">
-      <Image src={imgSource} width={280} height={280} alt={colName}></Image>
-      <h3 className="text-white text-center mt-2">{colName}</h3>
+      <Image
+        src={Collection.imgSource}
+        width={280}
+        height={280}
+        alt={Collection.colName}
+      ></Image>
+      <h3 className="text-white text-center mt-2">{Collection.colName}</h3>
     </div>
   );
 }

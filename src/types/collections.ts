@@ -1,9 +1,9 @@
-export interface CollectionProps {
+export type collection= {
   id:string;
 imgSource: string;
   colName: string;
 }
 
 export interface FeaturedCollectionsProps {
-  collections: CollectionProps[];
+  collections: collection[];
 }

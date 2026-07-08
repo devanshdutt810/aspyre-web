@@ -1,13 +1,13 @@
 import React from "react";
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import FeaturedCollections from "./components/FeaturedCollections";
-import FeaturedProducts from "./components/FeaturedProducts";
-import Footer from "./components/Footer";
+import Navbar from "../components/Navbar/Navbar";
+import Hero from "../components/Hero/Hero";
+import FeaturedCollections from "@/components/FeaturedCollections/FeaturedCollections";
+import FeaturedProducts from "../components/FeaturedProducts/FeaturedProducts";
+import Footer from "../components/Footer/Footer";
 import fetchCollectionsData from "@/data/collections";
 import fetchProductsData from "@/data/products";
 
-function page() {
+function HomePage() {
   const collectionsData = fetchCollectionsData();
 
   const products = fetchProductsData();
@@ -17,10 +17,10 @@ function page() {
       <Navbar />
       <Hero />
       <FeaturedCollections collections={collectionsData} />
-      <FeaturedProducts ProductsData={products} />
+      <FeaturedProducts products={products} noOfProducts={products.length} />
       <Footer />
     </>
   );
 }
 
-export default page;
+export default HomePage;
