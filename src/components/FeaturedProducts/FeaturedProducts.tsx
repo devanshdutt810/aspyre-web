@@ -1,29 +1,29 @@
 "use client";
 
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { product, FeaturedProductsProps } from "../../types/products";
 import PopUp from "../PopUp/PopUp";
+import { console } from "inspector";
 
 function ProductCard(Product: product): React.JSX.Element {
-  const [isFav, setFav] = useState(false);
-  const FavIcon = isFav ? "❤️" : "🤍";
   const content = `${Product.name} added to Favorites ❤️`;
   const color = "#f06b04";
+  const FavIcon = Product.isFavorite ? "❤️" : "🤍";
 
   function handleFavClick() {
-    setFav(!isFav);
+    Product.onToggleFavorite(Product.id);
   }
   return (
     <>
-      {isFav && <PopUp content={content} colorCode={color} />}
+      {Product.isFavorite && <PopUp content={content} colorCode={color} />}
       <div className="relative flex flex-col justify-center items-center bg-[#202020] rounded-xl p-2 m-2">
         <p className="bg-[#EEECE1] w-fit pl-2 pr-2 absolute top-2 right-2 text-center rounded-xl">
           {Product.badge}
         </p>
         <button
           onClick={handleFavClick}
-          className="w-fit pl-2 pr-2 absolute top-2 left-2 text-center text-2xl"
+          className="w-fit pl-2 pr-2 absolute top-2 left-2 text-center text-2x cursor-pointer"
         >
           {FavIcon}
         </button>
@@ -46,8 +46,24 @@ function ProductCard(Product: product): React.JSX.Element {
 export default function FeaturedProducts({
   products,
   noOfProducts,
+  updateFavSizeFP,
 }: FeaturedProductsProps) {
+  const [Favorites, SetFavorites] = useState<Set<string>>(new Set<string>());
   const [showAllBtn, SetShowAllBtn] = useState(false);
+
+  const handleFavorites = (id: string) => {
+    SetFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      updateFavSizeFP(next.size);
+      return next;
+    });
+  };
+
   function handleShowAll() {
     SetShowAllBtn(!showAllBtn);
   }
@@ -71,6 +87,8 @@ export default function FeaturedProducts({
                   price={c.price}
                   badge={c.badge}
                   id={c.id}
+                  isFavorite={Favorites.has(c.id)}
+                  onToggleFavorite={() => handleFavorites(c.id)}
                 />
               ))
             : first6Products.map((c) => (
@@ -82,6 +100,8 @@ export default function FeaturedProducts({
                   price={c.price}
                   badge={c.badge}
                   id={c.id}
+                  isFavorite={Favorites.has(c.id)}
+                  onToggleFavorite={() => handleFavorites(c.id)}
                 />
               ))}
         </div>

@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import Hero from "../components/Hero/Hero";
 import FeaturedCollections from "@/components/FeaturedCollections/FeaturedCollections";
@@ -11,13 +13,44 @@ function HomePage() {
   const collectionsData = fetchCollectionsData();
 
   const products = fetchProductsData();
+  // Ensure products conform to the expected `product` shape by adding
+  // missing fields required by FeaturedProducts: isFavorite and onToggleFavorite
+  const productsWithDefaults = products.map((p) => ({
+    ...p,
+    isFavorite: false,
+    onToggleFavorite: () => {},
+  }));
+
+  const [FavoritesSize, SetFavoritesSize] = useState(0);
+  const [SearchText, SetSearchText] = useState("");
+
+  const fetchSearchQuery = (searchQuery: string) => {
+    SetSearchText(searchQuery);
+  };
+
+  const handleFavoritesSize = (size: number) => {
+    SetFavoritesSize(size);
+  };
 
   return (
     <>
-      <Navbar />
+      <Navbar FavoritesSize={FavoritesSize} GetSearchQuery={fetchSearchQuery} />
       <Hero />
       <FeaturedCollections collections={collectionsData} />
-      <FeaturedProducts products={products} noOfProducts={products.length} />
+      <FeaturedProducts
+        products={
+          SearchText !== "" && SearchText !== undefined
+            ? productsWithDefaults.filter((p) => p.name.includes(SearchText))
+            : productsWithDefaults
+        }
+        noOfProducts={
+          SearchText !== "" && SearchText !== undefined
+            ? productsWithDefaults.filter((p) => p.name.includes(SearchText))
+                .length
+            : productsWithDefaults.length
+        }
+        updateFavSizeFP={handleFavoritesSize}
+      />
       <Footer />
     </>
   );

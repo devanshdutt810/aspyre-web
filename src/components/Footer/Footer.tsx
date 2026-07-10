@@ -7,7 +7,7 @@ export default function Footer() {
       <h1 className="m-5 text-center text-2xl italic">Join the Community</h1>
       <div className="flex rounded-xl w-fit bg-stone-300 p-4 gap-5">
         <input
-          className="w-100"
+          className="w-100 focus:outline-none focus:ring-0"
           name="myInput"
           placeholder="Enter Email to Join Our Community"
         />

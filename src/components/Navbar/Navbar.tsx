@@ -1,10 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
+import { NavbarProps } from "@/types/navbar";
 
-export default function Navbar() {
+export default function Navbar({ FavoritesSize, GetSearchQuery }: NavbarProps) {
   const [IsOpen, SetIsOpen] = useState(false);
+  const [IsHover, SetIsHover] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function showToolTip() {
+    SetIsHover(true);
+  }
+
+  function HideToolTip() {
+    SetIsHover(false);
+  }
+
+  const tooltipClass = IsHover
+    ? "absolute bg-[#202020] rounded-xl p-5 text-white w-fit right-5"
+    : "absolute bg-[#202020] rounded-xl p-5 text-white w-fit right-5 hidden";
   const NavBarClasses = `bg-[#EEECE1] w-fit flex flex-col justify-center gap-5 p-5 rounded-xl absolute border-1 ${!IsOpen ? "hidden" : ""}`;
   const MenuIcon = `${IsOpen ? "/icon/menuOpen.png" : "/icon/menuClose.png"}`;
 
@@ -12,24 +28,59 @@ export default function Navbar() {
     SetIsOpen(!IsOpen);
   }
 
+  function handleSearchQuery() {
+    debugger;
+    const searchQuery = inputRef.current?.value;
+    if (searchQuery !== "" && searchQuery !== undefined) {
+      GetSearchQuery(searchQuery);
+    } else {
+      GetSearchQuery("");
+    }
+  }
+
   return (
     <div className="p-5 bg-[#A3B087] relative">
-      <button>
-        <Image
-          src={MenuIcon}
-          width={24}
-          height={24}
-          alt="Aspyre Logo"
-          onClick={handleMenuShow}
-        ></Image>
-      </button>
+      <div className="flex gap-5 justify-between">
+        <button className="cursor-pointer">
+          <Image
+            src={MenuIcon}
+            width={24}
+            height={24}
+            alt="Aspyre Logo"
+            onClick={handleMenuShow}
+          ></Image>
+        </button>
+        <div className="flex gap-1 bg-stone-300 p-2 rounded-xl">
+          <input
+            ref={inputRef}
+            className="w-100 text-center focus:outline-none focus:ring-0"
+            name="searchInput"
+            placeholder="Search"
+          />
+          <button className="cursor-pointer" onClick={handleSearchQuery}>
+            <Image
+              src="/icon/search-interface-symbol.png"
+              width={24}
+              height={24}
+              alt="Aspyre Logo"
+              className="rotate-90"
+            ></Image>
+          </button>
+        </div>
+
+        <div
+          onMouseEnter={showToolTip}
+          onMouseLeave={HideToolTip}
+          className="mr-5 cursor-pointer"
+        >
+          <h1>❤️ {FavoritesSize}</h1>
+        </div>
+      </div>
+      <div className={tooltipClass}>
+        <h1>You have added {FavoritesSize} Products to Favorites</h1>
+      </div>
+
       <div id="NavBar" className={NavBarClasses}>
-        <Image
-          src="/icon/search-interface-symbol.png"
-          width={24}
-          height={24}
-          alt="Aspyre Logo"
-        ></Image>
         <h3>Home</h3>
         <h3>Aspyre Bestsellers</h3>
         <h3>All Collections</h3>

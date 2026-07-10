@@ -20,7 +20,7 @@ export default function Hero() {
       />
       <button
         onClick={handleShopNow}
-        className="p-2 m-5 bg-[#202020] rounded-xl text-white"
+        className="p-2 m-5 bg-[#202020] rounded-xl text-white cursor-pointer"
       >
         Shop Now
       </button>
