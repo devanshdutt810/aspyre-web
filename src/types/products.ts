@@ -1,16 +1,24 @@
 export type product = {
 id:string;
+category:string;
+slug:string;
+description:string;
   imgSource: string;
   name: string;
-  sizes: string;
+  sizes: string[];
   price: string;
   badge:string;
-  isFavorite:boolean
-  onToggleFavorite: (id: string) => void
+  
 };
 
+export type ProductCardProps={
+  product:product,
+  isFavorite:boolean
+  onToggleFavorite: (id: string) => void
+}
+
 export interface FeaturedProductsProps {
-  products: product[];
+  products: ProductCardProps[];
   noOfProducts: number
   updateFavSizeFP: (size:number) => void
 }

@@ -5,18 +5,17 @@ import Navbar from "../components/Navbar/Navbar";
 import Hero from "../components/Hero/Hero";
 import FeaturedCollections from "@/components/FeaturedCollections/FeaturedCollections";
 import FeaturedProducts from "../components/FeaturedProducts/FeaturedProducts";
-import Footer from "../components/Footer/Footer";
 import fetchCollectionsData from "@/data/collections";
 import fetchProductsData from "@/data/products";
+import { ProductCardProps } from "@/types/products";
 
 function HomePage() {
   const collectionsData = fetchCollectionsData();
 
   const products = fetchProductsData();
-  // Ensure products conform to the expected `product` shape by adding
-  // missing fields required by FeaturedProducts: isFavorite and onToggleFavorite
-  const productsWithDefaults = products.map((p) => ({
-    ...p,
+
+  const lstProduct: ProductCardProps[] = products.map((prod) => ({
+    product: prod,
     isFavorite: false,
     onToggleFavorite: () => {},
   }));
@@ -40,18 +39,24 @@ function HomePage() {
       <FeaturedProducts
         products={
           SearchText !== "" && SearchText !== undefined
-            ? productsWithDefaults.filter((p) => p.name.includes(SearchText))
-            : productsWithDefaults
+            ? lstProduct.filter((p) =>
+                p.product.name
+                  .toLocaleLowerCase()
+                  .includes(SearchText.toLocaleLowerCase()),
+              )
+            : lstProduct
         }
         noOfProducts={
           SearchText !== "" && SearchText !== undefined
-            ? productsWithDefaults.filter((p) => p.name.includes(SearchText))
-                .length
-            : productsWithDefaults.length
+            ? lstProduct.filter((p) =>
+                p.product.name
+                  .toLowerCase()
+                  .includes(SearchText.toLocaleLowerCase()),
+              ).length
+            : lstProduct.length
         }
         updateFavSizeFP={handleFavoritesSize}
       />
-      <Footer />
     </>
   );
 }

@@ -29,7 +29,6 @@ export default function Navbar({ FavoritesSize, GetSearchQuery }: NavbarProps) {
   }
 
   function handleSearchQuery() {
-    debugger;
     const searchQuery = inputRef.current?.value;
     if (searchQuery !== "" && searchQuery !== undefined) {
       GetSearchQuery(searchQuery);
