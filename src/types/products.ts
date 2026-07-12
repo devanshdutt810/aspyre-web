@@ -1,4 +1,4 @@
-export type product = {
+export type Product = {
 id:string;
 category:string;
 slug:string;
@@ -12,7 +12,7 @@ description:string;
 };
 
 export type ProductCardProps={
-  product:product,
+  product:Product,
   isFavorite:boolean
   onToggleFavorite: (id: string) => void
 }

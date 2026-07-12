@@ -27,6 +27,9 @@ function ProductCard({
   function handleFavClick() {
     onToggleFavorite(product.id);
   }
+
+  const productLink = `/products/${product.slug}`;
+
   return (
     <>
       {isFavorite && <PopUp content={content} colorCode={color} />}
@@ -50,6 +53,9 @@ function ProductCard({
         <h3 className="text-white text-center mt-2">{product.name}</h3>
         <h3 className="text-white text-center mt-2">{availableSizes}</h3>
         <h3 className="text-white text-center mt-2">{product.price}</h3>
+        <Link href={productLink} key={product.slug}>
+          <div className="bg-[#EEECE1] p-2 rounded-xl m-2">View Product</div>
+        </Link>
       </div>
     </>
   );
@@ -81,15 +87,14 @@ export default function FeaturedProducts({
   }
 
   function createProduct(product: ProductCardProps) {
-    const productLink = `/products/${product.product.slug}`;
+    //const productLink = `/products/${product.product.slug}`;
     return (
-      <Link href={productLink} key={product.product.slug}>
-        <ProductCard
-          product={product.product}
-          isFavorite={Favorites.has(product.product.id)}
-          onToggleFavorite={() => handleFavorites(product.product.id)}
-        />
-      </Link>
+      <ProductCard
+        key={product.product.id}
+        product={product.product}
+        isFavorite={Favorites.has(product.product.id)}
+        onToggleFavorite={() => handleFavorites(product.product.id)}
+      />
     );
   }
 

@@ -1,7 +1,8 @@
-import { product } from "@/types/products";
-import fetchProductDetails from "@/lib/fetchProductDetails";
+import { Product } from "@/types/products";
+import getProductBySlug from "@/lib/getProductBySlug";
 import Image from "next/image";
 import BackButton from "@/components/BackButton/BackButton";
+import PageNotFound from "@/components/PageNotFount/PageNotFound";
 
 export default async function Page({
   params,
@@ -9,11 +10,9 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const data = fetchProductDetails(slug);
+  const data = getProductBySlug(slug);
 
-  if (data === "Product Now Found") {
-    return <div>Product Not Found</div>;
-  } else {
+  if (data) {
     function sizesBlock(sizes: string[]) {
       return sizes.map((s) => (
         <button
@@ -24,8 +23,7 @@ export default async function Page({
         </button>
       ));
     }
-    const ProductDetails: product = JSON.parse(data);
-
+    const ProductDetails: Product = data;
     return (
       <>
         <div className="w-[100%] flex flex-col items-start">
@@ -67,5 +65,7 @@ export default async function Page({
         </div>
       </>
     );
+  } else {
+    return <PageNotFound />;
   }
 }
