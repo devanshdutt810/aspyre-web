@@ -13,12 +13,10 @@ description:string;
 
 export type ProductCardProps={
   product:Product,
-  isFavorite:boolean
-  onToggleFavorite: (id: string) => void
+  //isFavorite:boolean
 }
 
 export interface FeaturedProductsProps {
   products: ProductCardProps[];
   noOfProducts: number
-  updateFavSizeFP: (size:number) => void
 }

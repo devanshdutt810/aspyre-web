@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import Navbar from "../components/Navbar/Navbar";
 import Hero from "../components/Hero/Hero";
 import FeaturedCollections from "@/components/FeaturedCollections/FeaturedCollections";
 import FeaturedProducts from "../components/FeaturedProducts/FeaturedProducts";
 import fetchCollectionsData from "@/data/collections";
 import fetchProductsData from "@/data/products";
 import { ProductCardProps } from "@/types/products";
+import { UseSearchCtxHook } from "@/hooks/searchContextHook";
 
 function HomePage() {
   const collectionsData = fetchCollectionsData();
@@ -16,24 +15,13 @@ function HomePage() {
 
   const lstProduct: ProductCardProps[] = products.map((prod) => ({
     product: prod,
-    isFavorite: false,
-    onToggleFavorite: () => {},
+    //isFavorite: wishCtx?.favorites.has(prod.id) ?? false,
   }));
-
-  const [FavoritesSize, SetFavoritesSize] = useState(0);
-  const [SearchText, SetSearchText] = useState("");
-
-  const fetchSearchQuery = (searchQuery: string) => {
-    SetSearchText(searchQuery);
-  };
-
-  const handleFavoritesSize = (size: number) => {
-    SetFavoritesSize(size);
-  };
+  const searchCtx = UseSearchCtxHook();
+  const SearchText = searchCtx?.searchText ?? "";
 
   return (
     <>
-      <Navbar FavoritesSize={FavoritesSize} GetSearchQuery={fetchSearchQuery} />
       <Hero />
       <FeaturedCollections collections={collectionsData} />
       <FeaturedProducts
@@ -55,7 +43,6 @@ function HomePage() {
               ).length
             : lstProduct.length
         }
-        updateFavSizeFP={handleFavoritesSize}
       />
     </>
   );

@@ -3,18 +3,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { ProductCardProps, FeaturedProductsProps } from "../../types/products";
-import PopUp from "../PopUp/PopUp";
 import Link from "next/link";
+import WishlistBtn from "../Wishlist/WishlistBtn";
 
-function ProductCard({
-  product,
-  isFavorite,
-  onToggleFavorite,
-}: ProductCardProps): React.JSX.Element {
-  const content = `${product.name} added to Favorites ❤️`;
-  const color = "#f06b04";
-  const FavIcon = isFavorite ? "❤️" : "🤍";
-
+function ProductCard({ product }: ProductCardProps): React.JSX.Element {
   let sizes = "(";
   product.sizes.forEach((s) => {
     sizes += s;
@@ -24,25 +16,21 @@ function ProductCard({
   let availableSizes = sizes.slice(0, -1);
   availableSizes += ")";
 
-  function handleFavClick() {
-    onToggleFavorite(product.id);
-  }
-
   const productLink = `/products/${product.slug}`;
+  const wishlistBtnStyle =
+    "w-fit pl-2 pr-2 absolute top-2 left-2 text-center text-2x cursor-pointer";
 
   return (
     <>
-      {isFavorite && <PopUp content={content} colorCode={color} />}
       <div className="relative flex flex-col justify-center items-center bg-[#202020] rounded-xl p-2 m-2">
         <p className="bg-[#EEECE1] w-fit pl-2 pr-2 absolute top-2 right-2 text-center rounded-xl">
           {product.badge}
         </p>
-        <button
-          onClick={handleFavClick}
-          className="w-fit pl-2 pr-2 absolute top-2 left-2 text-center text-2x cursor-pointer"
-        >
-          {FavIcon}
-        </button>
+        <WishlistBtn
+          id={product.id}
+          name={product.name}
+          style={wishlistBtnStyle}
+        />
         <Image
           className="rounded-full"
           src={product.imgSource}
@@ -64,39 +52,16 @@ function ProductCard({
 export default function FeaturedProducts({
   products,
   noOfProducts,
-  updateFavSizeFP,
 }: FeaturedProductsProps) {
-  const [Favorites, SetFavorites] = useState<Set<string>>(new Set<string>());
   const [showAllBtn, SetShowAllBtn] = useState(false);
-
-  const handleFavorites = (id: string) => {
-    SetFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      updateFavSizeFP(next.size);
-      return next;
-    });
-  };
 
   function handleShowAll() {
     SetShowAllBtn((prev) => !prev);
   }
 
-  function createProduct(product: ProductCardProps) {
-    //const productLink = `/products/${product.product.slug}`;
-    return (
-      <ProductCard
-        key={product.product.id}
-        product={product.product}
-        isFavorite={Favorites.has(product.product.id)}
-        onToggleFavorite={() => handleFavorites(product.product.id)}
-      />
-    );
-  }
+  // function createProduct(product: ProductCardProps) {
+  //   return <ProductCard key={product.product.id} product={product.product} />;
+  // }
 
   if (noOfProducts > 0) {
     const tProductsH1 = `${noOfProducts} Products`;
@@ -109,8 +74,12 @@ export default function FeaturedProducts({
         <h1 className="m-5 text-2xl italic">{tProductsH1}</h1>
         <div className="grid grid-cols-4 gap-4">
           {showAllBtn
-            ? products.map((c) => createProduct(c))
-            : first6Products.map((c) => createProduct(c))}
+            ? products.map((c) => (
+                <ProductCard key={c.product.id} product={c.product} />
+              ))
+            : first6Products.map((c) => (
+                <ProductCard key={c.product.id} product={c.product} />
+              ))}
         </div>
         <div className="flex justify-center">
           <button

@@ -2,13 +2,20 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import { NavbarProps } from "@/types/navbar";
+import { UseSearchCtxHook } from "@/hooks/searchContextHook";
+import { UseWishlistCtxtHook } from "@/hooks/wishlistContextHook";
+import { UseCartCtxHook } from "@/hooks/cartContextHook";
+import Link from "next/link";
 
-export default function Navbar({ FavoritesSize, GetSearchQuery }: NavbarProps) {
+export default function Navbar() {
   const [IsOpen, SetIsOpen] = useState(false);
   const [IsHover, SetIsHover] = useState(false);
-
+  const searchCtx = UseSearchCtxHook();
   const inputRef = useRef<HTMLInputElement>(null);
+  const wishlistCtx = UseWishlistCtxtHook();
+  const wishlistSize = wishlistCtx?.favorites.size ?? 0;
+  const cartCtx = UseCartCtxHook();
+  const cartLength = cartCtx?.cart.length;
 
   function showToolTip() {
     SetIsHover(true);
@@ -30,15 +37,14 @@ export default function Navbar({ FavoritesSize, GetSearchQuery }: NavbarProps) {
 
   function handleSearchQuery() {
     const searchQuery = inputRef.current?.value;
-    if (searchQuery !== "" && searchQuery !== undefined) {
-      GetSearchQuery(searchQuery);
-    } else {
-      GetSearchQuery("");
+
+    if (searchCtx) {
+      searchCtx.setSearchText(searchQuery ?? "");
     }
   }
 
   return (
-    <div className="p-5 bg-[#A3B087] relative">
+    <div className="p-5 bg-[#A3B087] relative z-99">
       <div className="flex gap-5 justify-between">
         <button className="cursor-pointer">
           <Image
@@ -67,16 +73,25 @@ export default function Navbar({ FavoritesSize, GetSearchQuery }: NavbarProps) {
           </button>
         </div>
 
-        <div
-          onMouseEnter={showToolTip}
-          onMouseLeave={HideToolTip}
-          className="mr-5 cursor-pointer"
-        >
-          <h1>❤️ {FavoritesSize}</h1>
+        <div className="flex">
+          <div
+            onMouseEnter={showToolTip}
+            onMouseLeave={HideToolTip}
+            className="mr-5 cursor-pointer"
+          >
+            <h1 className="bg-[#202020] p-2 rounded-xl text-white m-2">
+              ❤️ {wishlistSize}
+            </h1>
+          </div>
+          <Link href="/cart">
+            <h1 className="bg-[#202020] p-2 rounded-xl text-white m-2">
+              🛒 {cartLength}
+            </h1>
+          </Link>
         </div>
       </div>
       <div className={tooltipClass}>
-        <h1>You have added {FavoritesSize} Products to Favorites</h1>
+        <h1>You have added {wishlistSize} Products to Favorites</h1>
       </div>
 
       <div id="NavBar" className={NavBarClasses}>
