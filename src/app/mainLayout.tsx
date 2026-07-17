@@ -6,7 +6,7 @@ import { CartContext } from "@/context/CartContext";
 import { SearchContext } from "@/context/SearchContext";
 import { WishlistContext } from "@/context/WishlistContext";
 import { useState } from "react";
-import { Cart } from "@/types/cart";
+import { AddToCartBtnProps } from "@/types/addToCartBtnProps";
 
 export default function MainLayout({
   children,
@@ -15,7 +15,7 @@ export default function MainLayout({
 }>) {
   const [searchText, setSearchText] = useState("");
   const [favorites, setFavorites] = useState(new Set<string>());
-  const [cart, setCart] = useState<Cart[]>([]);
+  const [cart, setCart] = useState<AddToCartBtnProps[]>([]);
   return (
     <WishlistContext.Provider value={{ favorites, setFavorites }}>
       <CartContext.Provider value={{ cart, setCart }}>

@@ -1,11 +1,11 @@
 "use client";
 
-import { UseWishlistCtxtHook } from "@/hooks/wishlistContextHook";
+import { useWishlist } from "@/hooks/wishlistContextHook";
 import { WishlistBtnProps } from "@/types/wishlistBtnProp";
 import PopUp from "../PopUp/PopUp";
 
 export default function WishlistBtn({ id, name, style }: WishlistBtnProps) {
-  const wishCtx = UseWishlistCtxtHook();
+  const wishCtx = useWishlist();
   const favorites = wishCtx?.favorites;
   const setFavorites = wishCtx?.setFavorites;
 

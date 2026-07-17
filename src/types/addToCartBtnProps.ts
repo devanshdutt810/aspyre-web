@@ -1,5 +1,5 @@
-import { Cart } from "./cart"
+import { Cart } from "./cart";
 
 export type AddToCartBtnProps = {
-    CurrentCart : Cart
-}
+  CurrentCart: Cart;
+};

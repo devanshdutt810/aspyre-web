@@ -2,20 +2,20 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import { UseSearchCtxHook } from "@/hooks/searchContextHook";
-import { UseWishlistCtxtHook } from "@/hooks/wishlistContextHook";
-import { UseCartCtxHook } from "@/hooks/cartContextHook";
+import { useSearch } from "@/hooks/searchContextHook";
+import { useWishlist } from "@/hooks/wishlistContextHook";
 import Link from "next/link";
+import { useCartActions } from "@/services/cart/cart.service";
 
 export default function Navbar() {
   const [IsOpen, SetIsOpen] = useState(false);
   const [IsHover, SetIsHover] = useState(false);
-  const searchCtx = UseSearchCtxHook();
+  const searchCtx = useSearch();
   const inputRef = useRef<HTMLInputElement>(null);
-  const wishlistCtx = UseWishlistCtxtHook();
+  const wishlistCtx = useWishlist();
   const wishlistSize = wishlistCtx?.favorites.size ?? 0;
-  const cartCtx = UseCartCtxHook();
-  const cartLength = cartCtx?.cart.length;
+  const cartActions = useCartActions();
+  const cartLength = cartActions.getCartSize();
 
   function showToolTip() {
     SetIsHover(true);

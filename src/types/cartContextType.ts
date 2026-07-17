@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction } from "react"
-import { Cart } from "./cart"
+import { Dispatch, SetStateAction } from "react";
+import { AddToCartBtnProps } from "./addToCartBtnProps";
 
 export type CartContextType = {
-    cart:Cart[]
-    setCart:Dispatch<SetStateAction<Cart[]>>
-}
+  cart: AddToCartBtnProps[];
+  setCart: Dispatch<SetStateAction<AddToCartBtnProps[]>>;
+};

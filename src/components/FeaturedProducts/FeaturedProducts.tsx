@@ -40,7 +40,7 @@ function ProductCard({ product }: ProductCardProps): React.JSX.Element {
         ></Image>
         <h3 className="text-white text-center mt-2">{product.name}</h3>
         <h3 className="text-white text-center mt-2">{availableSizes}</h3>
-        <h3 className="text-white text-center mt-2">{product.price}</h3>
+        <h3 className="text-white text-center mt-2">${product.price}</h3>
         <Link href={productLink} key={product.slug}>
           <div className="bg-[#EEECE1] p-2 rounded-xl m-2">View Product</div>
         </Link>

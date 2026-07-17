@@ -36,7 +36,7 @@ export default async function Page({
             <div className="w-full flex flex-col text-2xl text-center">
               <h1 className="p-2 text-4xl m-2">{ProductDetails.name}</h1>
               <h1 className="p-2 m-2">{ProductDetails.description}</h1>
-              <h1 className="p-2 m-2">{ProductDetails.price}</h1>
+              <h1 className="p-2 m-2">${ProductDetails.price}</h1>
               <PurchaseFeatures product={ProductDetails} />
             </div>
           </div>

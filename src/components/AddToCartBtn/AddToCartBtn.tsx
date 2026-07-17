@@ -1,43 +1,10 @@
-"use client";
-
-import { UseCartCtxHook } from "@/hooks/cartContextHook";
+import { useCartActions } from "@/services/cart/cart.service";
 import { AddToCartBtnProps } from "@/types/addToCartBtnProps";
-import { Cart } from "@/types/cart";
 
 export default function AddToCartBtn({ CurrentCart }: AddToCartBtnProps) {
-  const cartCtx = UseCartCtxHook();
-  const setCart = cartCtx?.setCart;
-
+  const CartActions = useCartActions();
   function handleCartAssignment() {
-    if (!setCart || !CurrentCart || CurrentCart.quantity <= 0) return;
-
-    setCart((prevCart) => {
-      const existingItemIndex = prevCart.findIndex(
-        (item) =>
-          item.product.id === CurrentCart.product.id &&
-          item.selectedSize === CurrentCart.selectedSize &&
-          item.selectedColor === CurrentCart.selectedColor,
-      );
-
-      if (existingItemIndex > -1) {
-        const updatedCart = [...prevCart];
-        updatedCart[existingItemIndex] = {
-          ...updatedCart[existingItemIndex],
-          quantity:
-            updatedCart[existingItemIndex].quantity + CurrentCart.quantity,
-        };
-        return updatedCart;
-      }
-
-      const newCartItem: Cart = {
-        product: CurrentCart.product,
-        selectedSize: CurrentCart.selectedSize,
-        selectedColor: CurrentCart.selectedColor,
-        quantity: CurrentCart.quantity,
-      };
-
-      return [...prevCart, newCartItem];
-    });
+    CartActions.addItem({ CurrentCart });
   }
 
   return (

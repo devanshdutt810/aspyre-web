@@ -6,7 +6,7 @@ import FeaturedProducts from "../components/FeaturedProducts/FeaturedProducts";
 import fetchCollectionsData from "@/data/collections";
 import fetchProductsData from "@/data/products";
 import { ProductCardProps } from "@/types/products";
-import { UseSearchCtxHook } from "@/hooks/searchContextHook";
+import { useSearch } from "@/hooks/searchContextHook";
 
 function HomePage() {
   const collectionsData = fetchCollectionsData();
@@ -17,7 +17,7 @@ function HomePage() {
     product: prod,
     //isFavorite: wishCtx?.favorites.has(prod.id) ?? false,
   }));
-  const searchCtx = UseSearchCtxHook();
+  const searchCtx = useSearch();
   const SearchText = searchCtx?.searchText ?? "";
 
   return (
