@@ -1,9 +1,10 @@
 "use client";
 
 import { UseCartCtxHook } from "@/hooks/cartContextHook";
+import { AddToCartBtnProps } from "@/types/addToCartBtnProps";
 import { Cart } from "@/types/cart";
 
-export default function AddToCartBtn(CurrentCart: Cart) {
+export default function AddToCartBtn({ CurrentCart }: AddToCartBtnProps) {
   const cartCtx = UseCartCtxHook();
   const setCart = cartCtx?.setCart;
 

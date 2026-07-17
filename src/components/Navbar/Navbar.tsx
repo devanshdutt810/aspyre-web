@@ -46,13 +46,12 @@ export default function Navbar() {
   return (
     <div className="p-5 bg-[#A3B087] relative z-99">
       <div className="flex gap-5 justify-between">
-        <button className="cursor-pointer">
+        <button className="cursor-pointer" onClick={handleMenuShow}>
           <Image
             src={MenuIcon}
             width={24}
             height={24}
             alt="Aspyre Logo"
-            onClick={handleMenuShow}
           ></Image>
         </button>
         <div className="flex gap-1 bg-stone-300 p-2 rounded-xl">

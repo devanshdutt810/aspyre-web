@@ -6,6 +6,7 @@ import WishlistBtn from "../Wishlist/WishlistBtn";
 import AddToCartBtn from "../AddToCartBtn/AddToCartBtn";
 import { ProductCardProps } from "@/types/products";
 import { useState } from "react";
+import { Cart } from "@/types/cart";
 
 export default function PurchaseFeatures({ product }: ProductCardProps) {
   const [SizeSelected, SetSizeSelected] = useState(product.sizes[0]);
@@ -27,6 +28,12 @@ export default function PurchaseFeatures({ product }: ProductCardProps) {
 
   const wishlistBtnStyle =
     "p-2 bg-[#202020] text-white cursor-pointer rounded-xl";
+  const CartItem: Cart = {
+    product: product,
+    selectedSize: SizeSelected,
+    selectedColor: "White",
+    quantity: Quantity,
+  };
   return (
     <div className="flex flex-col items-center">
       <div className="flex gap-5 m-5">
@@ -48,12 +55,7 @@ export default function PurchaseFeatures({ product }: ProductCardProps) {
           style={wishlistBtnStyle}
         />
 
-        <AddToCartBtn
-          product={product}
-          selectedSize={SizeSelected}
-          selectedColor={"White"}
-          quantity={Quantity}
-        />
+        <AddToCartBtn CurrentCart={CartItem} />
         <button className="p-2 bg-[#202020] text-white cursor-pointer rounded-xl">
           Buy Now
         </button>
