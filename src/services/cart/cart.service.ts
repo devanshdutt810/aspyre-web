@@ -48,7 +48,7 @@ export function useCartActions() {
 
   function increaseQuantity({ CurrentCart }: AddToCartBtnProps) {
     if (setCart) {
-      const nextQty = quantity + 1;
+      const nextQty = CurrentCart.quantity + 1;
       setQuantity(nextQty);
 
       // Update global context
@@ -65,8 +65,8 @@ export function useCartActions() {
   }
 
   function decreaseQuantity({ CurrentCart }: AddToCartBtnProps) {
-    if (quantity > 1 && setCart) {
-      const nextQty = quantity - 1;
+    if (CurrentCart.quantity > 1 && setCart) {
+      const nextQty = CurrentCart.quantity - 1;
       setQuantity(nextQty);
 
       setCart((prevCart) =>
@@ -104,7 +104,8 @@ export function useCartActions() {
     let subTotal: number = 0;
     if (cart) {
       cart?.forEach((pr) => {
-        subTotal += Number(pr.CurrentCart.product.price);
+        subTotal +=
+          Number(pr.CurrentCart.product.price) * pr.CurrentCart.quantity;
       });
     }
 

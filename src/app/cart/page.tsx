@@ -48,7 +48,7 @@ function CartCards({ CurrentCart }: AddToCartBtnProps): React.JSX.Element {
           </div>
         </div>
         <QuantityBtn
-          qty={CartActions.quantity}
+          qty={CurrentCart.quantity}
           handleQtyInc={handleQuantityIncrease}
           handleQtyDec={handleQuantityDecrease}
         />

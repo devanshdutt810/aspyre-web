@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import { CartContext } from "@/context/CartContext";
 import { SearchContext } from "@/context/SearchContext";
 import { WishlistContext } from "@/context/WishlistContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddToCartBtnProps } from "@/types/addToCartBtnProps";
 
 export default function MainLayout({
@@ -16,6 +16,27 @@ export default function MainLayout({
   const [searchText, setSearchText] = useState("");
   const [favorites, setFavorites] = useState(new Set<string>());
   const [cart, setCart] = useState<AddToCartBtnProps[]>([]);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem("YourCart");
+    if (savedCart) {
+      try {
+        setCart(JSON.parse(savedCart));
+      } catch (e) {
+        console.error("Error parsing cart data from localStorage:", e);
+      }
+    }
+    setIsHydrated(true); 
+  }, []);
+
+  
+  useEffect(() => {
+    if (isHydrated) {
+      localStorage.setItem("YourCart", JSON.stringify(cart));
+    }
+  }, [cart, isHydrated]);
+
   return (
     <WishlistContext.Provider value={{ favorites, setFavorites }}>
       <CartContext.Provider value={{ cart, setCart }}>
