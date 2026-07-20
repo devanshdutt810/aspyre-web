@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { ProductCardProps, FeaturedProductsProps } from "../../types/products";
 import Link from "next/link";
@@ -19,6 +19,13 @@ function ProductCard({ product }: ProductCardProps): React.JSX.Element {
   const productLink = `/products/${product.slug}`;
   const wishlistBtnStyle =
     "w-fit pl-2 pr-2 absolute top-2 left-2 text-center text-2x cursor-pointer";
+
+  const productsClicked = useRef(0);
+
+  function handleProductClickCount() {
+    productsClicked.current += 1;
+    console.log(productsClicked.current);
+  }
 
   return (
     <>
@@ -42,7 +49,12 @@ function ProductCard({ product }: ProductCardProps): React.JSX.Element {
         <h3 className="text-white text-center mt-2">{availableSizes}</h3>
         <h3 className="text-white text-center mt-2">${product.price}</h3>
         <Link href={productLink} key={product.slug}>
-          <div className="bg-[#EEECE1] p-2 rounded-xl m-2">View Product</div>
+          <div
+            className="bg-[#EEECE1] p-2 rounded-xl m-2"
+            onClick={handleProductClickCount}
+          >
+            View Product
+          </div>
         </Link>
       </div>
     </>

@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSearch } from "@/hooks/searchContextHook";
 import { useWishlist } from "@/hooks/wishlistContextHook";
 import Link from "next/link";
 import { useCartActions } from "@/services/cart/cart.service";
+import { json } from "stream/consumers";
 
 export default function Navbar() {
   const [IsOpen, SetIsOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function Navbar() {
   const wishlistSize = wishlistCtx?.favorites.size ?? 0;
   const cartActions = useCartActions();
   const cartLength = cartActions.getCartSize();
+  const previousSearchQuery = useRef("");
 
   function showToolTip() {
     SetIsHover(true);
@@ -39,9 +41,17 @@ export default function Navbar() {
     const searchQuery = inputRef.current?.value;
 
     if (searchCtx) {
+      previousSearchQuery.current = searchCtx?.searchText;
       searchCtx.setSearchText(searchQuery ?? "");
     }
+    if (searchCtx?.searchText && previousSearchQuery.current) {
+      console.log(searchCtx.searchText, previousSearchQuery.current);
+    }
   }
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <div className="p-5 bg-[#A3B087] relative z-99">
