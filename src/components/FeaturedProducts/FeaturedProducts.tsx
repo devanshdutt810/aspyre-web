@@ -1,10 +1,57 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ProductCardProps, FeaturedProductsProps } from "../../types/products";
+import {
+  ProductCardProps,
+  FeaturedProductsProps,
+  FilterBtnProps,
+} from "../../types/products";
 import Link from "next/link";
 import WishlistBtn from "../Wishlist/WishlistBtn";
+
+function FilterDropDown({ products, setCategory }: FilterBtnProps) {
+  const Categories = new Set<string>();
+  Categories.add("All");
+  let id = 1;
+  products.forEach((pr) => {
+    Categories.add(pr.product.category);
+  });
+  const [IsVisible, SetIsVisible] = useState(false);
+  return (
+    <>
+      <div className="relative right-0">
+        <button
+          className="cursor-pointer"
+          onClick={() => {
+            SetIsVisible((prev) => !prev);
+          }}
+        >
+          <Image
+            className="rounded-full"
+            src={"/icon/filter.png"}
+            width={30}
+            height={30}
+            alt="filter"
+          ></Image>
+        </button>
+        {IsVisible && (
+          <div className="absolute flex flex-col bg-[#202020] p-2 rounded-xl z-99 right-1 w-50">
+            {[...Categories].map((cat) => (
+              <button
+                key={id++}
+                className="bg-[#E0E0E0] p-2 rounded-xl m-1 cursor-pointer"
+                onClick={() => setCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
 
 function ProductCard({ product }: ProductCardProps): React.JSX.Element {
   let sizes = "(";
@@ -19,13 +66,6 @@ function ProductCard({ product }: ProductCardProps): React.JSX.Element {
   const productLink = `/products/${product.slug}`;
   const wishlistBtnStyle =
     "w-fit pl-2 pr-2 absolute top-2 left-2 text-center text-2x cursor-pointer";
-
-  const productsClicked = useRef(0);
-
-  function handleProductClickCount() {
-    productsClicked.current += 1;
-    console.log(productsClicked.current);
-  }
 
   return (
     <>
@@ -49,12 +89,7 @@ function ProductCard({ product }: ProductCardProps): React.JSX.Element {
         <h3 className="text-white text-center mt-2">{availableSizes}</h3>
         <h3 className="text-white text-center mt-2">${product.price}</h3>
         <Link href={productLink} key={product.slug}>
-          <div
-            className="bg-[#EEECE1] p-2 rounded-xl m-2"
-            onClick={handleProductClickCount}
-          >
-            View Product
-          </div>
+          <div className="bg-[#EEECE1] p-2 rounded-xl m-2">View Product</div>
         </Link>
       </div>
     </>
@@ -65,32 +100,58 @@ export default function FeaturedProducts({
   products,
   noOfProducts,
 }: FeaturedProductsProps) {
-  const [showAllBtn, SetShowAllBtn] = useState(false);
+  const [showAllBtn, SetShowAllBtn] = useState(true);
+  const [SelectedCategory, SetSelectedCategory] = useState("");
+  const ProductGrid = useRef<HTMLDivElement>(null);
+
+  function setCategory(category: string) {
+    SetSelectedCategory(category);
+  }
+
+  const productsClicked = useRef(0);
+
+  function handleProductClickCount() {
+    productsClicked.current += 1;
+    console.log(productsClicked.current);
+  }
+
+  useEffect(() => {
+    ProductGrid.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [SelectedCategory]);
 
   function handleShowAll() {
     SetShowAllBtn((prev) => !prev);
   }
 
-  // function createProduct(product: ProductCardProps) {
-  //   return <ProductCard key={product.product.id} product={product.product} />;
-  // }
-
   if (noOfProducts > 0) {
-    const tProductsH1 = `${noOfProducts} Products`;
-    const first6Products = products.slice(0, 5);
+    const SelectedCategoryProducts =
+      SelectedCategory !== "" && SelectedCategory !== "All"
+        ? products.filter((p) => p.product.category === SelectedCategory)
+        : products;
+    const first6Products = SelectedCategoryProducts.slice(0, 5);
+    const tProductsH1 = `${SelectedCategoryProducts.length} Products`;
+
     return (
-      <>
+      <div ref={ProductGrid}>
         <h1 className="m-5 text-center text-2xl italic">
           Best-Seller Products
         </h1>
-        <h1 className="m-5 text-2xl italic">{tProductsH1}</h1>
+        <div className="flex justify-between m-5">
+          <h1 className="m-5 text-2xl italic">{tProductsH1}</h1>
+          <FilterDropDown products={products} setCategory={setCategory} />
+        </div>
+
         <div className="grid grid-cols-4 gap-4">
           {showAllBtn
-            ? products.map((c) => (
-                <ProductCard key={c.product.id} product={c.product} />
+            ? SelectedCategoryProducts.map((c) => (
+                <div key={c.product.id} onClick={handleProductClickCount}>
+                  <ProductCard product={c.product} />
+                </div>
               ))
             : first6Products.map((c) => (
-                <ProductCard key={c.product.id} product={c.product} />
+                <div key={c.product.id} onClick={handleProductClickCount}>
+                  <ProductCard product={c.product} />
+                </div>
               ))}
         </div>
         <div className="flex justify-center">
@@ -101,7 +162,8 @@ export default function FeaturedProducts({
             {showAllBtn ? "Show Less" : "Show More"}
           </button>
         </div>
-      </>
+        <FilterDropDown products={products} setCategory={setCategory} />
+      </div>
     );
   } else {
     return (

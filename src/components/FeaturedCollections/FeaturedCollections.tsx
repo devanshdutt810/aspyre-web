@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import { collection, FeaturedCollectionsProps } from "../../types/collections";
 
@@ -28,6 +27,7 @@ export default function FeaturedCollections({
             key={c.id}
             imgSource={c.imgSource}
             colName={c.colName}
+            category={c.category}
             id={c.id}
           />
         ))}

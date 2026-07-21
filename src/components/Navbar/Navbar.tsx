@@ -6,7 +6,6 @@ import { useSearch } from "@/hooks/searchContextHook";
 import { useWishlist } from "@/hooks/wishlistContextHook";
 import Link from "next/link";
 import { useCartActions } from "@/services/cart/cart.service";
-import { json } from "stream/consumers";
 
 export default function Navbar() {
   const [IsOpen, SetIsOpen] = useState(false);
@@ -38,14 +37,14 @@ export default function Navbar() {
   }
 
   function handleSearchQuery() {
+    if (searchCtx?.searchText) {
+      previousSearchQuery.current = searchCtx?.searchText;
+    }
+    console.log(previousSearchQuery.current);
     const searchQuery = inputRef.current?.value;
 
     if (searchCtx) {
-      previousSearchQuery.current = searchCtx?.searchText;
       searchCtx.setSearchText(searchQuery ?? "");
-    }
-    if (searchCtx?.searchText && previousSearchQuery.current) {
-      console.log(searchCtx.searchText, previousSearchQuery.current);
     }
   }
 

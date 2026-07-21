@@ -12,10 +12,14 @@ export type Product = {
 
 export type ProductCardProps = {
   product: Product;
-  //isFavorite:boolean
 };
 
 export interface FeaturedProductsProps {
   products: ProductCardProps[];
   noOfProducts: number;
 }
+
+export type FilterBtnProps = {
+  products: ProductCardProps[];
+  setCategory: (category: string) => void;
+};

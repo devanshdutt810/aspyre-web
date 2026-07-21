@@ -27,14 +27,17 @@ export default function MainLayout({
         console.error("Error parsing cart data from localStorage:", e);
       }
     }
-    setIsHydrated(true); 
+    setIsHydrated(true);
   }, []);
 
-  
   useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem("YourCart", JSON.stringify(cart));
-    }
+    const debounceTimer = setTimeout(() => {
+      if (isHydrated) {
+        localStorage.setItem("YourCart", JSON.stringify(cart));
+      }
+    }, 2000);
+
+    return clearTimeout(debounceTimer);
   }, [cart, isHydrated]);
 
   return (
