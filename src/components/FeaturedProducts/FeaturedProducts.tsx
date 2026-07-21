@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import {
   ProductCardProps,
@@ -116,21 +116,29 @@ export default function FeaturedProducts({
   }
 
   useEffect(() => {
-    ProductGrid.current?.scrollTo({ top: 0, behavior: "smooth" });
+    ProductGrid.current?.scrollIntoView({ behavior: "smooth" });
   }, [SelectedCategory]);
 
   function handleShowAll() {
     SetShowAllBtn((prev) => !prev);
   }
 
-  if (noOfProducts > 0) {
-    const SelectedCategoryProducts =
-      SelectedCategory !== "" && SelectedCategory !== "All"
-        ? products.filter((p) => p.product.category === SelectedCategory)
-        : products;
-    const first6Products = SelectedCategoryProducts.slice(0, 5);
-    const tProductsH1 = `${SelectedCategoryProducts.length} Products`;
+  const SelectedCategoryProducts = useMemo(() => {
+    console.log("Filtering products...");
+    return SelectedCategory !== "" && SelectedCategory !== "All"
+      ? products.filter((p) => p.product.category === SelectedCategory)
+      : products;
+  }, [SelectedCategory, products]);
 
+  const first6Products = useMemo(() => {
+    return SelectedCategoryProducts.slice(0, 5);
+  }, [SelectedCategoryProducts]);
+
+  const tProductsH1 = useMemo(() => {
+    return `${SelectedCategoryProducts.length} Products`;
+  }, [SelectedCategoryProducts]);
+
+  if (noOfProducts > 0) {
     return (
       <div ref={ProductGrid}>
         <h1 className="m-5 text-center text-2xl italic">
